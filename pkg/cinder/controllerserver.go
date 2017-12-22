@@ -51,6 +51,18 @@ func (cs *controllerServer) CreateVolume(ctx context.Context, req *csi.CreateVol
 		volType = "lvmdriver-1"
 	}
 
+	// From existing volume (clone)
+	srcID := req.GetParameters()["volume"]
+	if len(srcID) == 0 {
+		srcID = ""
+	}
+
+	// From snaphsot
+	snapID := req.GetParameters()["snapshot"]
+	if len(snapID) == 0 {
+		snapID = ""
+	}
+
 	// Volume Availability - Default is nova
 	volAvailability := req.GetParameters()["availability"]
 	if len(volAvailability) == 0 {
@@ -65,7 +77,7 @@ func (cs *controllerServer) CreateVolume(ctx context.Context, req *csi.CreateVol
 	}
 
 	// Volume Create
-	resID, resAvailability, err := cloud.CreateVolume(volName, volSizeGB, volType, volAvailability, nil)
+	resID, resAvailability, err := cloud.CreateVolume(volName, volSizeGB, volType, volAvailability, srcID, snapID, nil)
 	if err != nil {
 		glog.V(3).Infof("Failed to CreateVolume: %v", err)
 		return nil, err

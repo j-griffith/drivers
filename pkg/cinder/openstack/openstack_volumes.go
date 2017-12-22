@@ -59,12 +59,14 @@ type Volume struct {
 }
 
 // CreateVolume creates a volume of given size
-func (os *OpenStack) CreateVolume(name string, size int, vtype, availability string, tags *map[string]string) (string, string, error) {
+func (os *OpenStack) CreateVolume(name string, size int, vtype, availability, volume, snapshot string, tags *map[string]string) (string, string, error) {
 	opts := &volumes.CreateOpts{
 		Name:             name,
 		Size:             size,
 		VolumeType:       vtype,
 		AvailabilityZone: availability,
+		SourceVolID:      volume,
+		SnapshotID:       snapshot,
 	}
 	if tags != nil {
 		opts.Metadata = *tags

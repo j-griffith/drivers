@@ -22,11 +22,11 @@ import (
 	"github.com/golang/glog"
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/openstack"
-	"gopkg.in/gcfg.v1"
+	gcfg "gopkg.in/gcfg.v1"
 )
 
 type IOpenStack interface {
-	CreateVolume(name string, size int, vtype, availability string, tags *map[string]string) (string, string, error)
+	CreateVolume(name string, size int, vtype, availability, volume, snapshot string, tags *map[string]string) (string, string, error)
 	DeleteVolume(volumeID string) error
 	AttachVolume(instanceID, volumeID string) (string, error)
 	WaitDiskAttached(instanceID string, volumeID string) error
