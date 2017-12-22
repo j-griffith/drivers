@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-.PHONY: all flexadapter nfs hostpath iscsi cinder clean
+.PHONY: all flexadapter nfs hostpath iscsi cinder solidfire clean
 
-all: flexadapter nfs hostpath iscsi cinder
+all: flexadapter nfs hostpath iscsi cinder solidfire
 
 test:
 	go test github.com/kubernetes-csi/drivers/pkg/... -cover
@@ -35,6 +35,10 @@ iscsi:
 cinder:
 	if [ ! -d ./vendor ]; then dep ensure; fi
 	go build -o _output/cinderplugin ./app/cinderplugin
+solidfire:
+	if [ ! -d ./vendor ]; then dep ensure; fi
+	go build -o _output/solidfireplugin ./app/solidfireplugin
+
 
 clean:
 	go clean -r -x
